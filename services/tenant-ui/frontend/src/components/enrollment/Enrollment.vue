@@ -96,7 +96,7 @@
       :show-filter-match-modes="false"
     >
       <template #body="{ data }">
-        {{ formatDate(data.created_at)}}
+        {{ formatDate(data.created_at) }}
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <InputText
@@ -115,7 +115,7 @@
           rounded
           :szie="large"
           class="p-button-text"
-          @click="handleDialog(data)"
+          @click="$emit('select', data)"
         />
         <Button
           icon="pi pi-trash"
@@ -128,20 +128,11 @@
       </template>
     </Column>
   </DataTable>
-  <Dialog
-    v-model:visible="showDialog"
-    modal
-    :style="{ width: '50vw' }"
-    :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-  >
-    <EnrollmentForm :enrollment="selectedEnrollment" />
-  </Dialog>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import { useToast } from 'vue-toastification';
-import { useI18n } from 'vue-i18n';
 import { useTenantStore } from '@/store';
 import { storeToRefs } from 'pinia';
 import { TABLE_OPT } from '@/helpers/constants';
@@ -149,18 +140,23 @@ import Button from 'primevue/button';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import InputText from 'primevue/inputtext';
-import Dialog from 'primevue/dialog';
-import EnrollmentForm from './EnrollmentForm.vue';
 
+defineEmits(['select']);
 const toast = useToast();
-const { t } = useI18n();
 const enrollments = ref(null);
 const { tenantWallet } = storeToRefs(useTenantStore());
 const tenantStore = useTenantStore();
 const webhookUrl = ref(null);
 const webhookKey = ref(null);
 const formatDate = (date) => {
-  const options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+  const options = {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  };
   return new Date(date).toLocaleDateString('en-US', options);
 };
 const loadTenantSettings = async () => {
@@ -229,14 +225,6 @@ const filter = ref({
   },
 });
 
-//Dialog
-
-const showDialog = ref(false);
-const selectedEnrollment = ref(null);
-const handleDialog = async (enrollment) => {
-  selectedEnrollment.value = enrollment;
-  showDialog.value = true;
-};
 const handleDelete = async (enrollment) => {
   const confirmed = confirm(
     `Are you sure you want to delete the enrollment for ${enrollment.student_full_name}?`

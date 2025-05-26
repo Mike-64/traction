@@ -18,7 +18,7 @@
         :value="
           String(summary.find((item) => item.kind === 'Invited')?.count || 0)
         "
-      /> 
+      />
       <Card
         title="Failed"
         :value="
@@ -38,9 +38,9 @@
       />
     </div>
     <button
+      v-tooltip.left="'Refresh Data'"
       class="p-button p-button-sm p-button-rounded p-button-text absolute bottom-0 right-0 mb-3 mr-3"
       style="z-index: 10"
-      v-tooltip.left="'Refresh Data'"
       @click="fetchSummaryData(true)"
     >
       <i class="pi pi-refresh"></i>

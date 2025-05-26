@@ -12,20 +12,20 @@ const API_ROOT: string = config.get("server.apiPath");
 const LOKI_URL: string = config.get("server.lokiUrl");
 const PORT: number = parseInt(config.get("server.port") as string, 10);
 const STATIC_FILES_PATH: string = config.get("server.staticFiles");
-//const CORS_ALLOWED_ORIGINS: string = config.get("server.corsAllowedOrigins");
+// const CORS_ALLOWED_ORIGINS: string = config.get("server.corsAllowedOrigins");
 
 import history from "connect-history-api-fallback";
 
 const app = express();
 
 // Disable X-Powered-By header for security
-app.disable("x-powered-by");
+// app.disable("x-powered-by");
 
 // Apply Helmet's default security headers
-/* app.use(helmet());
+// app.use(helmet());
 
 // Apply a specific Content Security Policy
-app.use(
+/* app.use(
   helmet.contentSecurityPolicy({
     directives: {
       // It's likely need to adjust this later to allow resources from CDNs or other trusted domains that our application uses.
@@ -40,15 +40,15 @@ app.use(
 
 app.use(history());
 
-/* // Configure CORS
-const corsOptions = {
+// Configure CORS
+/* const corsOptions = {
   origin:
     CORS_ALLOWED_ORIGINS === "*"
       ? "*"
       : CORS_ALLOWED_ORIGINS.split(",").map((origin) => origin.trim()),
 };
 app.use(cors(corsOptions)); */
-app.use(cors()); 
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
